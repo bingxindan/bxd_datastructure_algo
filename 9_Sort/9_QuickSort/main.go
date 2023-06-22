@@ -1,11 +1,54 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 func main() {
 	nums := []int{39, 2, 5, 23}
 	response := quickSort(nums, 0, len(nums)-1)
 	fmt.Println("response: ", response)
+}
+
+func sortArray(nums []int) []int {
+	quick(&nums, 0, len(nums)-1)
+	return nums
+}
+
+func quick(arr *([]int), i, j int) {
+	if i >= j {
+		return
+	}
+	mid := partition(arr, i, j)
+	quick(arr, i, mid-1)
+	quick(arr, mid+1, j)
+}
+
+func partition(arr *([]int), i, j int) int {
+	// 随机选取支点
+	p := rand.Intn(j-i+1) + i
+	nums := *arr
+	nums[i], nums[p] = nums[p], nums[i]
+	for i < j {
+		// 修改原来的 nums[j] >= nums[i]，增加交换频率
+		for nums[i] < nums[j] && i < j {
+			j--
+		}
+		if i < j {
+			nums[i], nums[j] = nums[j], nums[i]
+			i++
+		}
+		// 修改原来的 nums[j] >= nums[i]，增加交换频率
+		for nums[i] < nums[j] && i < j {
+			i++
+		}
+		if i < j {
+			nums[i], nums[j] = nums[j], nums[i]
+			j--
+		}
+	}
+	return i
 }
 
 func quickSort(nums []int, left, right int) []int {
